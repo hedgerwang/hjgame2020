@@ -1,27 +1,9 @@
-# boilerplate-babel-webpack
+# About
 
-[![npm version](https://badge.fury.io/js/boilerplate-babel-webpack.svg)](https://badge.fury.io/js/boilerplate-babel-webpack)
-[![downloads count](https://img.shields.io/npm/dt/boilerplate-babel-webpack.svg)](https://www.npmjs.com/~piecioshka)
-[![dependencies](https://david-dm.org/piecioshka/boilerplate-babel-webpack.svg)](https://github.com/piecioshka/boilerplate-babel-webpack)
-
-:fork_and_knife: Starter with Babel.js and Webpack
-
-## Game Source
-
-- See https://eloquentjavascript.net/16_game.html
-
-## Features
-
-- :white_check_mark: Webpack `v4.31.0`
-- :white_check_mark: Babel (Core) `v7.4.4`
-- :white_check_mark: Support syntax `ES2015+`
-- :white_check_mark: Static directory `public/`
-- :white_check_mark: Analysis of bundle file weight (`source-map-explorer`)
-- :white_check_mark: Two build settings: dev (with source maps) & prod (compress file)
+I built an [online HTML5 platform game](https://hjgame2020.herokuapp.com/) with my son together for his  1st grade school STEM project. 
+The source code of the game was originally created by [Marijn Kaverbeke](https://marijnhaverbeke.nl/) as an [online tutorial ](https://eloquentjavascript.net/16_game.html ) and I've modified the codes to include new features such as touch device support, sound playing and custom styles.
 
 ## Getting started
-
-You can start in two ways:
 
 ### Use Git
 
@@ -29,19 +11,10 @@ You can start in two ways:
 mkdir PROJECT_NAME
 cd $_     # Note: "$_" is last argument of previous command
 git init  # Note: branch "master" is created
-git remote add boilerplate git@github.com:piecioshka/boilerplate-babel-webpack.git
-git pull boilerplate master
-git remote remove boilerplate
+git remote add hjgame2020 git@github.com:hedgerwang/hjgame2020.git
+git pull hjgame2020 master
+git remote remove hjgame2020
 ```
-
-or ...
-
-### Use Zip
-
-1. Download package file:<br/>
-   <https://github.com/piecioshka/boilerplate-babel-webpack/archive/master.zip>
-2. Extract it to your project directory.
-
 ## How to build an application?
 
 - development
@@ -56,7 +29,7 @@ or ...
   npm run build:production
   ```
 
-_Open public/ directory in browser._
+_Open build/index.html in browser._
 
 ## How to develop an application?
 
@@ -64,11 +37,11 @@ _Open public/ directory in browser._
 npm run watch
 ```
 
-_Open build/ directory in browser._
+_Open build/index.html in browser._
 
 ## Remove generated directory
 
-If you would like to remove `public/dist` directory (created by Webpack):
+If you would like to remove `build/` directory (created by Webpack):
 
 ```bash
 npm run clear
@@ -99,4 +72,4 @@ npm run audit
 
 ## License
 
-[The MIT License](http://piecioshka.mit-license.org) @ 2017
+The MIT License
