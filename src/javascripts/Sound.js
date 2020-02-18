@@ -48,6 +48,7 @@ export default class Sound {
 
   _onLoad = () => {
     this._ready = true;
+    console.log('loaded sound', this._src);
   };
 
   _tryElement = () => {
@@ -84,3 +85,8 @@ export default class Sound {
     }
   };
 }
+
+// Preload sounds.
+Sound.get('playing_1.mp3');
+Sound.get('jump_2.mp3');
+Sound.get('ohno_2.mp3');

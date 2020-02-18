@@ -2272,6 +2272,7 @@ function () {
 
     _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_2___default()(this, "_onLoad", function () {
       _this._ready = true;
+      console.log('loaded sound', _this._src);
     });
 
     _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_2___default()(this, "_tryElement", function () {
@@ -2353,9 +2354,13 @@ function () {
   }]);
 
   return Sound;
-}();
+}(); // Preload sounds.
 
 
+
+Sound.get('playing_1.mp3');
+Sound.get('jump_2.mp3');
+Sound.get('ohno_2.mp3');
 
 /***/ }),
 
