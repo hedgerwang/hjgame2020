@@ -8,7 +8,7 @@ The source code of the game was originally created by [Marijn Kaverbeke](https:/
 ### Use Git
 
 ```bash
-mkdir PROJECT_NAME
+mkdir hjgame2020
 cd $_     # Note: "$_" is last argument of previous command
 git init  # Note: branch "master" is created
 git remote add hjgame2020 git@github.com:hedgerwang/hjgame2020.git
