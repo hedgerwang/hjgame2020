@@ -1,0 +1,384 @@
+html {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  background: #000;
+}
+
+html::before {
+  color: #fff;
+  content: '';
+  left: 0;
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  user-select: none;
+}
+
+@media (hover: hover) {
+  html::before {
+    content: 'mouse';
+  }
+}
+
+@media (hover: none) {
+  html::before {
+    content: 'touch';
+  }
+}
+
+audio {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  pointer-events: none;
+  user-select: none;
+}
+
+body {
+  background: #000;
+  height: 100vh;
+  margin: 0;
+  width: 100vw;
+  user-select: none;
+}
+
+.viewport {
+  align-items: center;
+  bottom: 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  left: 0;
+  /* outline-offset: -1px;
+  outline: solid 1px #ccc; */
+  position: absolute;
+  right: 0;
+  top: 0;
+  pointer-events: none;
+  background: #000;
+}
+
+.log {
+  position: fixed;
+  top: 0;
+  left: 0;
+  color: #fff;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 10px;
+}
+
+.game {
+  pointer-events: none;
+  background-image: url('stars_1.gif');
+  background-size: cover;
+  background-position: center;
+  background-repeat: repeat-x;
+  overflow: hidden;
+  width: 300px;
+  height: 225px;
+  position: relative;
+  margin: 0 auto;
+  border-radius: 10px;
+  /* outline: solid 10px green;
+  outline-offset: -10px; */
+}
+
+.game::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  box-shadow: inset 0px 0px 21px 1px #000000;
+  border-radius: 10px;
+  z-index: 1000;
+}
+
+.game .foreground {
+  box-shadow: inset 0px 0px 4px -3px #000000;
+
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  z-index: 3;
+}
+
+.game .actor {
+  position: absolute;
+}
+
+.game[data-level='2'],
+.game[data-level='5'] {
+  /* background-image: url('galaxy_1.gif'); */
+}
+
+.game[data-level='3'],
+.game[data-level='6'] {
+  /* background-image: url('galaxy_1.gif'); */
+}
+
+.game[data-level='2'] .grid,
+.game[data-level='2'] .background {
+  filter: hue-rotate(60deg);
+}
+
+.game[data-level='3'] .grid,
+.game[data-level='3'] .background {
+  filter: hue-rotate(120deg);
+}
+
+.game[data-level='4'] .grid,
+.game[data-level='4'] .background {
+  filter: hue-rotate(180deg);
+}
+
+.game[data-level='5'] .grid,
+.game[data-level='5'] .background {
+  filter: hue-rotate(240deg);
+}
+
+.game .scores {
+  position: absolute;
+  top: 0;
+  left: 10px;
+  right: 10px;
+  text-align: center;
+  z-index: 9999;
+  color: #fff;
+  white-space: nowrap;
+  font-size: 22px;
+  font-weight: bold;
+  font-family: 'Comic Sans MS Bold', 'Comic Sans MS', 'Comic Sans';
+  text-shadow: 0 0 2px #fff, 0 0 2px #fff, 0 0 6px #000, 0 0 10px #49ff18,
+    0 0 5px #49ff18, 0 0 5px #49ff18, 0 0 5px #49ff18, 0 0 5px #49ff18;
+  transform: scaleY(0.8);
+}
+
+.game .background {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  z-index: 1;
+  bottom: 0;
+  background-size: 300px 100px;
+  background-repeat: repeat-x;
+  background-position: 0 bottom;
+}
+
+.game .background-1 {
+  background-image: url('city_3.png');
+  z-index: 1;
+}
+
+.game .background-2 {
+  background-image: url('city_4.png');
+  z-index: 2;
+}
+
+.game .grid {
+  table-layout: fixed;
+  border-spacing: 0;
+  position: relative;
+  z-index: 2;
+}
+
+.grid td {
+  padding: 0;
+}
+
+.game .lava {
+  background: rgb(255, 100, 100);
+  /* https://www.online-image-editor.com/gifmaker/ */
+  background-image: url('lava_anim_1.gif');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
+}
+
+.game .lava[data-action='movex'],
+.game .lava[data-action='movey'],
+.game .lava[data-action='drop'] {
+  border-radius: 50%;
+  border: solid 1px red;
+}
+
+.game .wall {
+  /* background: rgb(28, 2, 21); */
+  background-image: url('wall_1.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.game .coin {
+  /* background: rgb(241, 229, 89); */
+  background-image: url('coin_1.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.game .player {
+  /* background: rgb(64, 64, 64); */
+  background-image: url('player_stand.png');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  border: solid 2px transparent;
+  transform: scaleX(-1);
+  border-width: 0 2px;
+  z-index: 1000;
+}
+
+.game .player[data-direction='right'] {
+  transform: scaleX(-1);
+}
+
+.game .player[data-direction='left'] {
+  transform: scaleX(1);
+}
+
+.game .player[data-action='jump'] {
+  background-image: url('player_jump.png');
+}
+
+.game .player[data-action='step-1'] {
+  background-image: url('player_step1.png');
+}
+
+.game .player[data-action='step-2'] {
+  background-image: url('player_step2.png');
+}
+
+.game.lost .player {
+  /* background: rgb(160, 64, 64); */
+  transform: scaleX(1);
+  background-image: url('player_dead.png');
+}
+
+.game .player[data-action='jump']::after,
+.game.lost .player::after {
+  content: '';
+  position: absolute;
+  top: -3em;
+  border: solid 2px #fff;
+  left: -2em;
+  color: #fff;
+  border-radius: 1em;
+  padding: 3px;
+  white-space: nowrap;
+  font-size: 6px;
+  font-weight: bold;
+  font-family: 'Comic Sans', 'Courier New', Courier, monospace;
+}
+
+.game .player[data-action='jump']::after {
+  background: rgb(29, 50, 206);
+  content: 'hexagon!';
+}
+
+.game.lost .player::after {
+  background: rgb(160, 64, 64);
+  content: 'OH NO!';
+}
+
+.game .player[data-direction='right'][data-action='jump']::after {
+  transform: scaleX(-1);
+}
+
+.game.lost .player[data-direction='right'][data-action='jump']::after {
+  transform: scaleX(1);
+}
+
+.game.won .player {
+  box-shadow: 0 0 8px #fff, 0 0 8px #fff;
+  background-color: rgba(252, 252, 21, 0.5);
+  border-radius: 50%;
+}
+
+.game .monster {
+  background-image: url('monster_step_1.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.game .monster[data-action='step-1'] {
+  background-image: url('monster_step_1.png');
+}
+
+.game .monster[data-action='step-2'] {
+  background-image: url('monster_step_2.png');
+}
+
+.game .monster[data-action='dying'] {
+  background-image: url('monster_dead.png');
+}
+
+.input-manager-panel {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+  z-index: 1000;
+  overflow: hidden;
+}
+
+.input-manager-panel .arrow {
+  display: block;
+  width: 0;
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-bottom: 30px solid rgba(255, 255, 255, 0.9);
+  position: relative;
+  top: -3px;
+  pointer-events: none;
+}
+
+.input-manager-panel .left-arrow {
+  transform: rotate(-90deg);
+  left: -3px;
+  top: 0;
+}
+
+.input-manager-panel .right-arrow {
+  transform: rotate(90deg);
+  left: 3px;
+  top: 0;
+}
+
+.input-manager-panel .control {
+  -webkit-tap-highlight-color: transparent;
+  text-decoration: none;
+  pointer-events: auto;
+  bottom: 0;
+  height: 80px;
+  width: 80px;
+  background: rgba(255, 255, 255, 0.1);
+  float: left;
+  margin: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  border-radius: 50%;
+  outline: none;
+}
+
+.input-manager-panel .control.pressed {
+  transform: scale(0.9);
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.input-manager-panel .control-up {
+  float: right;
+}

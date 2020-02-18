@@ -1,0 +1,58 @@
+{
+  "name": "boilerplate-babel-webpack",
+  "version": "1.0.6",
+  "description": "Starter with Babel.js and Webpack",
+  "license": "MIT",
+  "author": {
+    "name": "Piotr Kowalski",
+    "email": "piecioshka@gmail.com",
+    "url": "https://piecioshka.pl"
+  },
+  "scripts": {
+    "audit": "source-map-explorer public/dist/main.bundle.js",
+    "clear": "rm -rf build/*",
+    "clear:all": "rm -rf node_modules/ && npm run clear",
+    "count": "find src -name '*.js' | xargs wc -l | sort -r",
+    "build": "npm run build:development",
+    "build:development": "webpack --config webpack/webpack.config.dev.js",
+    "build:production": "webpack --config webpack/webpack.config.prod.js",
+    "watch": "npm run build:development -- -w",
+    "server": "node build/server.js",
+    "start": "node build/server.js"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.4.4",
+    "@babel/plugin-proposal-class-properties": "^7.1.0",
+    "@babel/plugin-transform-runtime": "^7.8.3",
+    "@babel/preset-env": "^7.4.4",
+    "babel-loader": "^8.0.6",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "copy-webpack-plugin": "^5.1.1",
+    "css-loader": "^3.4.2",
+    "source-map-explorer": "^1.8.0",
+    "style-loader": "^1.1.3",
+    "webpack": "^4.31.0",
+    "webpack-cli": "^3.3.2"
+  },
+  "keywords": [
+    "webpack",
+    "module",
+    "bundler",
+    "babel",
+    "starter",
+    "boilerplate",
+    "source map",
+    "explorer",
+    "count",
+    "loc",
+    "line of code"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/piecioshka/boilerplate-babel-webpack"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.8.4",
+    "express": "^4.17.1"
+  }
+}
