@@ -14,6 +14,7 @@ git init  # Note: branch "master" is created
 git remote add hjgame2020 git@github.com:hedgerwang/hjgame2020.git
 git pull hjgame2020 master
 git remote remove hjgame2020
+npm install
 ```
 ## How to build an application?
 
