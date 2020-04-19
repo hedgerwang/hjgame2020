@@ -1,5 +1,6 @@
 import Sound from './Sound';
 import canUseTouch from './canUseTouch';
+import 'joypad.js';
 
 const KEYS = {
   ArrowLeft: 'ArrowLeft',
@@ -28,7 +29,7 @@ function createDOM() {
 function noop() {}
 
 function bindEvents(inputMapping) {
-  Object.keys(inputMapping).forEach(key => {
+  Object.keys(inputMapping).forEach((key) => {
     window.addEventListener(key, inputMapping[key], {
       passive: false,
       capture: true,
@@ -49,7 +50,7 @@ function isTouching(touchEvent, rect) {
 
 function calculateLayouts(elements) {
   const map = new Map();
-  elements.forEach(el => {
+  elements.forEach((el) => {
     const {top, left, right, bottom} = el.getBoundingClientRect();
     const rect = {top, left, right, bottom};
     map.set(el, rect);
@@ -59,14 +60,14 @@ function calculateLayouts(elements) {
 
 class InputState {
   constructor() {
-    Object.keys(KEYS).forEach(key => {
+    Object.keys(KEYS).forEach((key) => {
       this[key] = false;
     });
   }
 
   toJSON = () => {
     const json = {};
-    Object.keys(KEYS).forEach(key => {
+    Object.keys(KEYS).forEach((key) => {
       json[key] = this[key];
     });
     return json;
@@ -92,6 +93,7 @@ export default class InputManager {
     this._dom = dom;
     this._controls = Array.from(dom.querySelectorAll('.control'));
     this._layouts = calculateLayouts(this._controls);
+    this._joyPadMoveData = null;
 
     const inputMapping = useTouch
       ? {
@@ -127,15 +129,54 @@ export default class InputManager {
         };
 
     bindEvents(appBinding);
+
+    const {joypad} = window;
+    if (joypad) {
+      joypad.on('button_press', this._onJoyPadPress);
+      joypad.on('axis_move', this._onJoyPadMove);
+    }
   }
 
   getState = () => {
     return this._pressedState;
   };
 
+  _onJoyPadPress = (e) => {
+    const {buttonName} = e.detail;
+    const key = KEYS.ArrowUp;
+    this._pressKey(key);
+    setTimeout(this._releaseKey.bind(this, key), 150);
+  };
+
+  _onJoyPadMove = (e) => {
+    const {directionOfMovement, stickMoved} = e.detail;
+    let key;
+    if (stickMoved === 'left_stick') {
+      if (directionOfMovement === 'left') {
+        key = KEYS.ArrowLeft;
+      } else if (directionOfMovement === 'right') {
+        key = KEYS.ArrowRight;
+      }
+    }
+
+    if (this._joyPadMoveData) {
+      this._releaseKey(this._joyPadMoveData.key);
+      clearTimeout(this._joyPadMoveData.timer);
+      this._joyPadMoveData = null;
+    }
+
+    if (key) {
+      this._joyPadMoveData = {
+        key,
+        timer: setTimeout(this._releaseKey.bind(this, key), 150),
+      };
+      this._pressKey(key);
+    }
+  };
+
   _render = () => {
     const state = this.getState();
-    this._controls.forEach(control => {
+    this._controls.forEach((control) => {
       const key = control.name;
       if (state[key]) {
         control.classList.add('pressed');
@@ -145,7 +186,7 @@ export default class InputManager {
     });
   };
 
-  _pressKey = keyValue => {
+  _pressKey = (keyValue) => {
     const key = KEYS[keyValue];
     let state = this._pressedState;
     switch (key) {
@@ -166,7 +207,7 @@ export default class InputManager {
     }
   };
 
-  _releaseKey = keyValue => {
+  _releaseKey = (keyValue) => {
     const key = KEYS[keyValue];
     let state = this._pressedState;
 
@@ -183,45 +224,45 @@ export default class InputManager {
     }
   };
 
-  _onKeyDown = event => {
+  _onKeyDown = (event) => {
     this._pressKey(event.key);
   };
 
-  _onKeyUp = event => {
+  _onKeyUp = (event) => {
     this._releaseKey(event.key);
   };
 
-  _onMouseDown = event => {
+  _onMouseDown = (event) => {
     const touches = event.touches ? Array.from(event.touches) : [event];
     const touchedControls = touches
-      .map(tt => tt.target.closest('.control'))
+      .map((tt) => tt.target.closest('.control'))
       .filter(Boolean);
 
-    touchedControls.forEach(control => {
+    touchedControls.forEach((control) => {
       this._pressKey(control.name);
     });
   };
 
-  _onMouseUp = event => {
+  _onMouseUp = (event) => {
     const touches = event.touches ? Array.from(event.touches) : [];
     const touchedControls = new Set(
-      touches.map(tt => tt.target.closest('.control')).filter(Boolean)
+      touches.map((tt) => tt.target.closest('.control')).filter(Boolean)
     );
 
-    this._controls.forEach(control => {
+    this._controls.forEach((control) => {
       if (!touchedControls.has(control)) {
         this._releaseKey(control.name);
       }
     });
   };
 
-  _onMouseMove = event => {
+  _onMouseMove = (event) => {
     const touches = event.touches ? Array.from(event.touches) : [];
     touches.push(event);
-    this._controls.forEach(control => {
+    this._controls.forEach((control) => {
       const key = control.name;
       const rect = this._layouts.get(control);
-      const touching = touches.some(touchEvent => {
+      const touching = touches.some((touchEvent) => {
         return isTouching(touchEvent, rect);
       });
       if (touching) {

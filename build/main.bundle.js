@@ -1024,6 +1024,22 @@ module.exports = __webpack_require__(/*! regenerator-runtime */ "./node_modules/
 
 /***/ }),
 
+/***/ "./node_modules/joypad.js/dist/joypad.min.js":
+/*!***************************************************!*\
+  !*** ./node_modules/joypad.js/dist/joypad.min.js ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/*	
+    joypad.js v2.1.4	
+    Copyright (c) 2019 Arun Michael Dsouza (amdsouza92@gmail.com)	
+    Licence: MIT	
+*/
+!function(t){var e={};function n(o){if(e[o])return e[o].exports;var i=e[o]={i:o,l:!1,exports:{}};return t[o].call(i.exports,i,i.exports,n),i.l=!0,i.exports}n.m=t,n.c=e,n.d=function(t,e,o){n.o(t,e)||Object.defineProperty(t,e,{enumerable:!0,get:o})},n.r=function(t){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})},n.t=function(t,e){if(1&e&&(t=n(t)),8&e)return t;if(4&e&&"object"==typeof t&&t&&t.__esModule)return t;var o=Object.create(null);if(n.r(o),Object.defineProperty(o,"default",{enumerable:!0,value:t}),2&e&&"string"!=typeof t)for(var i in t)n.d(o,i,function(e){return t[e]}.bind(null,i));return o},n.n=function(t){var e=t&&t.__esModule?function(){return t.default}:function(){return t};return n.d(e,"a",e),e},n.o=function(t,e){return Object.prototype.hasOwnProperty.call(t,e)},n.p="",n(n.s=0)}([function(t,e,n){"use strict";n.r(e);var o={events:{},publish:function(t,e){this.events.hasOwnProperty(t)&&this.events[t].forEach(t=>t(e))},subscribe:function(t,e){return this.events.hasOwnProperty(t)||(this.events[t]=[]),this.events[t].push(e),{unsubscribe:function(){this.events[t].splice(this.events[t].indexOf(e),1)}.bind(this)}}};const i={NATIVE:"gamepadconnected",ALIAS:"connect"},s={NATIVE:"gamepaddisconnected",ALIAS:"disconnect"},r={NATIVE:null,ALIAS:"button_press"},a={NATIVE:null,ALIAS:"axis_move"},u={NAME:"left_stick",AXES:{X:0,Y:1}},d={NAME:"right_stick",AXES:{X:2,Y:3}},c="left",p="right",l="top",b="bottom",A={button_0:0,button_1:1,button_2:2,button_3:3,button_4:4,button_5:5,button_6:6,button_7:7,button_8:8,button_9:9,button_10:10,button_11:11,button_12:12,button_13:13,button_14:14,button_15:15,button_16:16,button_17:17},f=t=>{console.warn&&"function"==typeof console.warn?console.warn(t):console.log(t)};var h={loopStarted:!1,instances:{},buttonEvents:{joypad:[]},settings:{axisMovementThreshold:.8},remove:function(t){return delete this.instances[t]},on:function(t,e){switch(t){case i.ALIAS:return o.subscribe(i.ALIAS,e);case s.ALIAS:return o.subscribe(s.ALIAS,e);case r.ALIAS:return o.subscribe(r.ALIAS,e);case a.ALIAS:return o.subscribe(a.ALIAS,e)}},vibrate:function(t,e){const{vibrationActuator:n}=t,o=e||this.settings.vibration;if((t=>!!(t&&t.type&&t.playEffect&&"function"==typeof t.playEffect))(n)){const{type:e}=n;return t.vibrationActuator.playEffect(e,o)}f("No vibration actuator interface found - https://developer.mozilla.org/en-US/docs/Web/API/GamepadHapticActuator")},set:function(t){const{axisMovementThreshold:e,vibration:n,customButtonMapping:o}=t,i=parseFloat(e);isNaN(i)||(this.settings.axisMovementThreshold=i),this.settings.vibration=n,this.settings.customButtonMapping=o}};var v={id:null,start:function(){const t=window.requestAnimationFrame||window.webkitRequestAnimationFrame,{buttonEvents:e}=h;let n=window.navigator.getGamepads();(n=Array.prototype.slice.call(n)).forEach((t,n)=>{t&&(e.joypad[n]||(e.joypad[n]={}),h.instances[n]=t,m(t),y(t))}),e.joypad.forEach(t=>{t&&Object.keys(t).forEach(e=>{w(e,t)})}),this.id=t(this.start.bind(this))},stop:function(t){return(window.cancelAnimationFrame||window.webkitCancelAnimationFrame)(t)}};const m=t=>{t.buttons.forEach((e,n)=>{const{customButtonMapping:o}=h.settings,i=((t,e)=>{let n=[];return Object.keys(e).forEach(o=>{e[o]===t?n.push(o):Array.isArray(e[o])&&-1!==e[o].indexOf(t)&&n.push(o)}),n})(n,o||A),{buttonEvents:s}=h;i&&i.length&&i.forEach(o=>{e.pressed?(s.joypad[t.index][o]||(s.joypad[t.index][o]={pressed:!0,hold:!1,released:!1}),s.joypad[t.index][o].button=e,s.joypad[t.index][o].index=n,s.joypad[t.index][o].gamepad=t):!e.pressed&&s.joypad[t.index][o]&&(s.joypad[t.index][o].released=!0,s.joypad[t.index][o].hold=!1)})})},y=t=>{const{axisMovementThreshold:e}=h.settings,{axes:n}=t,o=n.length/2;n.forEach((n,i)=>{if(Math.abs(n)>e){let e=null,s=null,r=n;e=i<o?u.NAME:d.NAME,i!==u.AXES.X&&i!==d.AXES.X||(s=n<0?c:p),i!==u.AXES.Y&&i!==d.AXES.Y||(s=n<0?l:b);const A={gamepad:t,totalSticks:o,stickMoved:e,directionOfMovement:s,axisMovementValue:r,axis:i};return window.dispatchEvent((t=>new CustomEvent(a.ALIAS,{detail:t}))(A))}})},w=(t,e)=>{if(e[t].pressed){const n=t=>new CustomEvent(r.ALIAS,{detail:t}),{index:o,gamepad:i}=e[t],s={buttonName:t,button:e[t].button,index:o,gamepad:i};window.dispatchEvent(n(s)),e[t].pressed=!1,e[t].hold=!0}else e[t].hold||e[t].released&&delete e[t]};window.addEventListener(i.NATIVE,t=>{if(o.publish(i.ALIAS,t),!h.loopStarted)return h.loopStarted=!0,v.start()}),window.addEventListener(s.NATIVE,t=>{if(o.publish(s.ALIAS,t),h.remove(t.gamepad.index),h.buttonEvents.joypad[t.gamepad.index]=null,!Object.keys(h.instances).length)return h.loopStarted=!1,v.stop(v.id)}),window.addEventListener(r.ALIAS,t=>o.publish(r.ALIAS,t)),window.addEventListener(a.ALIAS,t=>o.publish(a.ALIAS,t)),(()=>!(!window.navigator.getGamepads||"function"!=typeof window.navigator.getGamepads))()?window.joypad=h:(window.joypad={},f("Your browser does not support the Gamepad API - https://developer.mozilla.org/en-US/docs/Web/API/Gamepad_API"))}]);
+
+/***/ }),
+
 /***/ "./src/javascripts/Coin.js":
 /*!*********************************!*\
   !*** ./src/javascripts/Coin.js ***!
@@ -1522,6 +1538,10 @@ var Game = function Game() {
     // alert(msg);
     return true; // same as preventDefault
   };
+
+  window.addEventListener('gamepadconnected', function (e) {
+    console.log('Gamepad connected at index %d: %s. %d buttons, %d axes.', e.gamepad.index, e.gamepad.id, e.gamepad.buttons.length, e.gamepad.axes.length);
+  });
 };
 
 
@@ -1544,6 +1564,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _Sound__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Sound */ "./src/javascripts/Sound.js");
 /* harmony import */ var _canUseTouch__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./canUseTouch */ "./src/javascripts/canUseTouch.js");
+/* harmony import */ var joypad_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! joypad.js */ "./node_modules/joypad.js/dist/joypad.min.js");
+/* harmony import */ var joypad_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(joypad_js__WEBPACK_IMPORTED_MODULE_4__);
+
 
 
 
@@ -1640,6 +1663,46 @@ var InputManager = function InputManager(viewport) {
 
   _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_1___default()(this, "getState", function () {
     return _this2._pressedState;
+  });
+
+  _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_1___default()(this, "_onJoyPadPress", function (e) {
+    var buttonName = e.detail.buttonName;
+    var key = KEYS.ArrowUp;
+
+    _this2._pressKey(key);
+
+    setTimeout(_this2._releaseKey.bind(_this2, key), 150);
+  });
+
+  _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_1___default()(this, "_onJoyPadMove", function (e) {
+    var _e$detail = e.detail,
+        directionOfMovement = _e$detail.directionOfMovement,
+        stickMoved = _e$detail.stickMoved;
+    var key;
+
+    if (stickMoved === 'left_stick') {
+      if (directionOfMovement === 'left') {
+        key = KEYS.ArrowLeft;
+      } else if (directionOfMovement === 'right') {
+        key = KEYS.ArrowRight;
+      }
+    }
+
+    if (_this2._joyPadMoveData) {
+      _this2._releaseKey(_this2._joyPadMoveData.key);
+
+      clearTimeout(_this2._joyPadMoveData.timer);
+      _this2._joyPadMoveData = null;
+    }
+
+    if (key) {
+      _this2._joyPadMoveData = {
+        key: key,
+        timer: setTimeout(_this2._releaseKey.bind(_this2, key), 150)
+      };
+
+      _this2._pressKey(key);
+    }
   });
 
   _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_1___default()(this, "_render", function () {
@@ -1764,6 +1827,7 @@ var InputManager = function InputManager(viewport) {
   this._dom = dom;
   this._controls = Array.from(dom.querySelectorAll('.control'));
   this._layouts = calculateLayouts(this._controls);
+  this._joyPadMoveData = null;
   var inputMapping = useTouch ? {
     keydown: this._onKeyDown,
     keyup: this._onKeyUp,
@@ -1791,6 +1855,13 @@ var InputManager = function InputManager(viewport) {
     resize: this._onResize
   };
   bindEvents(appBinding);
+  var _window = window,
+      joypad = _window.joypad;
+
+  if (joypad) {
+    joypad.on('button_press', this._onJoyPadPress);
+    joypad.on('axis_move', this._onJoyPadMove);
+  }
 };
 
 

@@ -24,8 +24,8 @@ function runLevel(viewport, level, Display, inputManager) {
   let display = new Display(viewport, level);
   let state = State.start(level);
   let ending = 1;
-  return new Promise(resolve => {
-    runAnimation(time => {
+  return new Promise((resolve) => {
+    runAnimation((time) => {
       state = state.update(time, inputManager.getState());
       display.syncState(state);
       if (state.status == 'playing') {
@@ -61,7 +61,7 @@ function playGameSound(event) {
     return;
   }
   if (Sound.get('playing_1.mp3').play(true)) {
-    initialInteractionEvents.forEach(type =>
+    initialInteractionEvents.forEach((type) =>
       window.removeEventListener(type, playGameSound, true)
     );
   }
@@ -74,16 +74,26 @@ export default class Game {
     document.body.appendChild(viewport);
 
     // Long sound must be trigged by user's interaction first.
-    initialInteractionEvents.forEach(type =>
+    initialInteractionEvents.forEach((type) =>
       window.addEventListener(type, playGameSound, true)
     );
 
     const inputManager = new InputManager(viewport);
     runGame(viewport, GAME_LEVELS, DOMDisplay, inputManager);
 
-    window.onerror = function(msg, url, line) {
+    window.onerror = function (msg, url, line) {
       // alert(msg);
       return true; // same as preventDefault
     };
+
+    window.addEventListener('gamepadconnected', (e) => {
+      console.log(
+        'Gamepad connected at index %d: %s. %d buttons, %d axes.',
+        e.gamepad.index,
+        e.gamepad.id,
+        e.gamepad.buttons.length,
+        e.gamepad.axes.length
+      );
+    });
   }
 }
