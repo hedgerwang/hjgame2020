@@ -27,7 +27,14 @@ export default class Sound {
       el.muted = false;
       el.autoplay = true;
       el.currentTime = 0;
-      el.play();
+      el.play().then(
+        (played) => {
+          //
+        },
+        (error) => {
+          this.stop();
+        }
+      );
     });
     return true;
   }
@@ -78,7 +85,7 @@ export default class Sound {
     return el;
   };
 
-  _renderEl = event => {
+  _renderEl = (event) => {
     document.body.appendChild(this._el);
     if (event) {
       window.removeEventListener('load', this._renderEl, true);

@@ -7,21 +7,21 @@ const SIZE = new Vec(4, 2);
 let dir = 0;
 
 export default class FlyGuardian {
-  constructor(pos, speed, reset, costume) {
-    this.pos = pos;
-    this.speed = speed;
-    this.reset = reset;
-    this.size = SIZE;
-    this.type = 'fly-guardian';
+  constructor(pos, speed, costume, attrs) {
+    this.attrs = attrs;
     this.costume = costume || 'frame-1';
-    this.boundingBox = new BoundingBox(pos, SIZE);
+    this.pos = pos;
+    this.size = SIZE;
+    this.speed = speed;
+    this.type = 'fly-guardian';
   }
 
   static create(pos, ch) {
     dir++;
     const speed = dir % 2 ? new Vec(2, 0) : new Vec(-2, 0);
-    console.log(dir, speed);
-    return new FlyGuardian(pos, speed, null, null);
+    return new FlyGuardian(pos, speed, 'frame-1', {
+      direction: dir % 2 ? 'left' : 'right',
+    });
   }
 
   collide = (state) => {
@@ -29,42 +29,44 @@ export default class FlyGuardian {
   };
 
   update = (time, state) => {
-    let newPos = this.pos.plus(this.speed.times(time));
-    const frame = (Math.round(this.pos.x) % 2) + 1;
+    const now = Date.now();
+    const frame = now % 8 <= 4 ? 1 : 2;
     const costume = `frame-${frame}`;
 
-    if (state.level.touches(newPos, this.size, 'wall')) {
-      return new FlyGuardian(this.pos, this.speed.times(-1), null, costume);
-    }
+    let speed = this.speed;
+    let pos = this.pos.plus(speed.times(time));
+    let attrs = this.attrs;
 
-    const anotherGuardian = state.actors.find(
-      this._isTouchingAnotherFlyGuardian
-    );
+    if (state.level.touches(pos, this.size, 'wall')) {
+      pos = this.pos;
+      speed = this.speed.times(-1);
+    } else {
+      const boxThis = new BoundingBox(pos, this.size);
+      const anotherGuardian = state.actors.find((actor) => {
+        if (actor == this || actor.type !== 'fly-guardian') {
+          return false;
+        }
+        const boxThat = new BoundingBox(actor.pos, actor.size);
+        return boxThis.isOverlapping(boxThat);
+      });
 
-    if (anotherGuardian) {
-      let speed = this.speed;
-      let pos = this.pos;
-      if (speed.x > 0 && this.pos.x < anotherGuardian.pos.x) {
-        speed = speed.times(-1);
-        pos = pos.plus(speed.times(0.1));
+      if (anotherGuardian) {
+        const mx = anotherGuardian.pos.x + anotherGuardian.size.x / 2;
+        pos = this.pos;
+        if (speed.x > 0 && pos.x < mx) {
+          speed = speed.times(-1);
+        }
+        if (speed.x < 0 && pos.x > mx) {
+          speed = speed.times(-1);
+        }
       }
-      if (speed.x < 0 && this.pos.x > anotherGuardian.pos.x) {
-        speed = speed.times(-1);
-        pos = pos.plus(speed.times(0.1));
-      }
-      return new FlyGuardian(pos, speed, this.reset, costume);
     }
 
-    if (this.reset) {
-      return new FlyGuardian(this.reset, this.speed, this.reset, costume);
+    const direction = speed.x < 0 ? 'left' : 'right';
+    if (attrs.direction !== direction) {
+      attrs = {...attrs, direction};
     }
-    return new FlyGuardian(newPos, this.speed, this.reset, costume);
-  };
 
-  _isTouchingAnotherFlyGuardian = (actor) => {
-    if (actor == this || actor.type !== 'fly-guardian') {
-      return false;
-    }
-    return this.boundingBox.isOverlapping(actor.boundingBox);
+    return new FlyGuardian(pos, speed, costume, attrs);
   };
 }

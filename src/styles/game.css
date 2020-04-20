@@ -328,7 +328,11 @@ body {
   background-size: 100% 180%;
   background-repeat: no-repeat;
   background-position: center top;
-  xbackground-color: rgba(255, 0, 0, 0.4);
+  background-color: rgba(255, 0, 0, 0.4);
+}
+
+.game .fly-guardian[data-direction='right'] {
+  transform: rotateY(180deg);
 }
 
 .game .fly-guardian[data-costume='frame-1'] {
