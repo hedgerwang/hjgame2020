@@ -16,7 +16,7 @@ export default class Sound {
   }
 
   play(loop = false) {
-    if (this._playing || !this._ready) {
+    if (1 || this._playing || !this._ready) {
       return false;
     }
     this.stop();

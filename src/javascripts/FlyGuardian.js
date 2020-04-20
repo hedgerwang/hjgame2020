@@ -1,8 +1,20 @@
 import BoundingBox from './BoundingBox';
 import State from './State';
 import Vec from './Vec';
+import clamp from './clamp';
 
-const SIZE = new Vec(4, 2);
+const SIZE = new Vec(4, 4);
+const ATTACK_POS_OFFSET = new Vec(1, 1);
+const ATTACK_SIZE_OFFSET = new Vec(-1, -1);
+
+function isAttacking(player, guardian) {
+  const playerBox = new BoundingBox(player.pos, player.size);
+  const guardianBox = new BoundingBox(
+    guardian.pos.plus(ATTACK_POS_OFFSET),
+    guardian.size.plus(ATTACK_SIZE_OFFSET)
+  );
+  return guardianBox.isOverlapping(playerBox);
+}
 
 let dir = 0;
 
@@ -25,8 +37,12 @@ export default class FlyGuardian {
   }
 
   collide = (state) => {
-    return state;
-    // return new State(state.level, state.actors, 'lost');
+    let {status, player, actors, level} = state;
+    if (isAttacking(player, this)) {
+      status = 'lost';
+      debugger;
+    }
+    return new State(level, actors, status);
   };
 
   update = (time, state) => {
@@ -35,7 +51,7 @@ export default class FlyGuardian {
     // deg => 1 ~ -1.
     const deg = Math.cos(((now % 3600) / 3600) * Math.PI * 2);
     const rotate = `${deg * 45}deg`;
-    const opacity = Math.abs(deg) + 0.2;
+    const opacity = clamp(Math.abs(deg), 0.2, 0.8);
     const costume = `frame-${frame}`;
     const skew = `${deg / 20}turn`;
     let speed = this.speed;

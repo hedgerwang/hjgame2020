@@ -13,6 +13,18 @@ function isPointAtBox(point, box) {
   return true;
 }
 
+function isOverlapping(boxA, boxB) {
+  return (
+    isPointAtBox(boxA.pos, boxB) ||
+    isPointAtBox(new Vec(boxA.pos.x + boxA.size.x, boxA.pos.y), boxB) ||
+    isPointAtBox(new Vec(boxA.pos.x, boxA.size.y + boxA.pos.y), boxB) ||
+    isPointAtBox(
+      new Vec(boxA.pos.x + boxA.size.x, boxA.size.y + boxA.pos.y),
+      boxB
+    )
+  );
+}
+
 export default class BoundingBox {
   constructor(pos, size) {
     this.pos = pos;
@@ -20,14 +32,6 @@ export default class BoundingBox {
   }
 
   isOverlapping(box) {
-    return (
-      isPointAtBox(box.pos, this) ||
-      isPointAtBox(new Vec(box.pos.x + box.size.x, box.pos.y), this) ||
-      isPointAtBox(new Vec(box.pos.x, box.size.y + box.pos.y), this) ||
-      isPointAtBox(
-        new Vec(box.pos.x + box.size.x, box.size.y + box.pos.y),
-        this
-      )
-    );
+    return isOverlapping(box, this); // || isOverlapping(this, box);
   }
 }
