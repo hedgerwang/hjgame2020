@@ -324,6 +324,21 @@ body {
   background-image: url('monster_dead.png');
 }
 
+.game .fly-guardian {
+  background-size: 100% 180%;
+  background-repeat: no-repeat;
+  background-position: center top;
+  xbackground-color: rgba(255, 0, 0, 0.4);
+}
+
+.game .fly-guardian[data-action='frame-1'] {
+  background-image: url('boss_a_1.png');
+}
+
+.game .fly-guardian[data-action='frame-2'] {
+  background-image: url('boss_a_2.png');
+}
+
 .input-manager-panel {
   position: absolute;
   left: 10px;

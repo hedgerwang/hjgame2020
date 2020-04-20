@@ -1,4 +1,5 @@
 import Coin from './Coin';
+import FlyGuardian from './FlyGuardian';
 import Lava from './Lava';
 import Monster from './Monster';
 import Player from './Player';
@@ -11,6 +12,7 @@ const levelChars = {
   '=': Lava,
   '@': Player,
   '|': Lava,
+  F: FlyGuardian,
   M: Monster,
   o: Coin,
   v: Lava,
@@ -21,7 +23,7 @@ export default class Level {
     let rows = plan
       .trim()
       .split('\n')
-      .map(l => [...l]);
+      .map((l) => [...l]);
     this.height = rows.length;
     this.width = rows[0].length;
     this.startActors = [];
