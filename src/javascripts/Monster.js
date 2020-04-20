@@ -20,14 +20,13 @@ export default class Monster {
   disposed = null;
   costume = null;
   opacity = 1;
-  constructor(pos, speed, attrs) {
+  constructor(pos, speed, costume, attrs) {
+    this.attrs = attrs || {};
+    this.costume = costume || '';
     this.pos = pos;
-    this.speed = speed;
     this.size = SIZE;
+    this.speed = speed;
     this.type = 'monster';
-    if (attrs) {
-      Object.assign(this, attrs);
-    }
   }
 
   static create(pos) {
@@ -38,21 +37,20 @@ export default class Monster {
     if (this.disposed) {
       return this;
     }
+    const {deadAt} = this.attrs;
 
-    if (this.deadAt) {
-      const duration = Date.now() - this.deadAt;
+    if (deadAt) {
+      const duration = Date.now() - deadAt;
       if (duration > 1000) {
-        return new Monster(DEAD_POS, DEAD_SPEED, {
-          deadAt: this.deadAt,
+        return new Monster(DEAD_POS, DEAD_SPEED, 'dying', {
+          deadAt,
           disposed: true,
-          costume: 'dying',
           opacity: 0,
         });
       } else {
-        return new Monster(this.pos, DEAD_SPEED, {
-          deadAt: this.deadAt,
+        return new Monster(this.pos, DEAD_SPEED, 'dying', {
+          deadAt,
           disposed: false,
-          costume: 'dying',
           opacity: 1 - duration / 1000,
         });
       }
@@ -64,25 +62,23 @@ export default class Monster {
     const costume = dx < 1 ? 'step-1' : 'step-2';
 
     if (isKilling(state.player, newPos)) {
-      return new Monster(this.pos, DEAD_SPEED, {
+      return new Monster(this.pos, DEAD_SPEED, 'dying', {
         deadAt: Date.now(),
         disposed: false,
-        costume: 'dying',
         opacity: 1,
       });
     }
     if (!state.level.touches(newPos, this.size, 'wall')) {
-      return new Monster(newPos, this.speed, {costume});
-    } else if (this.reset) {
-      return new Monster(this.reset, this.speed, {costume});
+      return new Monster(newPos, this.speed, costume, this.attrs);
     } else {
-      return new Monster(this.pos, this.speed.times(-1), {costume});
+      return new Monster(this.pos, this.speed.times(-1), costume, this.attrs);
     }
   }
 
   collide(state) {
-    if (this.deadAt) {
-      if (this.disposed) {
+    const {deadAt, disposed} = this.attrs;
+    if (deadAt) {
+      if (disposed) {
         return new State(
           state.level,
           state.actors.filter((ac) => ac !== this),

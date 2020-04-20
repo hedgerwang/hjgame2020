@@ -1265,9 +1265,10 @@ function drawActors(actors) {
     var py = "".concat(actor.pos.y * scale, "px");
     rect.style.left = px;
     rect.style.top = py;
-    rect.setAttribute('data-direction', actor.direction || '');
+    var direction = actor.attrs ? actor.attrs.direction : null;
+    rect.setAttribute('data-direction', direction || '');
     rect.setAttribute('data-costume', actor.costume || '');
-    var opacity = actor.opacity;
+    var opacity = actor.attrs ? actor.attrs.opacity : null;
 
     if (typeof opacity === 'number') {
       rect.style.opacity = opacity;
@@ -2231,7 +2232,7 @@ function isKilling(player, monsterPos) {
 var Monster =
 /*#__PURE__*/
 function () {
-  function Monster(pos, speed, attrs) {
+  function Monster(pos, speed, costume, attrs) {
     _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_0___default()(this, Monster);
 
     _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_2___default()(this, "deadAt", null);
@@ -2242,14 +2243,12 @@ function () {
 
     _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_2___default()(this, "opacity", 1);
 
+    this.attrs = attrs || {};
+    this.costume = costume || '';
     this.pos = pos;
-    this.speed = speed;
     this.size = SIZE;
+    this.speed = speed;
     this.type = 'monster';
-
-    if (attrs) {
-      Object.assign(this, attrs);
-    }
   }
 
   _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_1___default()(Monster, [{
@@ -2259,21 +2258,21 @@ function () {
         return this;
       }
 
-      if (this.deadAt) {
-        var duration = Date.now() - this.deadAt;
+      var deadAt = this.attrs.deadAt;
+
+      if (deadAt) {
+        var duration = Date.now() - deadAt;
 
         if (duration > 1000) {
-          return new Monster(DEAD_POS, DEAD_SPEED, {
-            deadAt: this.deadAt,
+          return new Monster(DEAD_POS, DEAD_SPEED, 'dying', {
+            deadAt: deadAt,
             disposed: true,
-            costume: 'dying',
             opacity: 0
           });
         } else {
-          return new Monster(this.pos, DEAD_SPEED, {
-            deadAt: this.deadAt,
+          return new Monster(this.pos, DEAD_SPEED, 'dying', {
+            deadAt: deadAt,
             disposed: false,
-            costume: 'dying',
             opacity: 1 - duration / 1000
           });
         }
@@ -2284,26 +2283,17 @@ function () {
       var costume = dx < 1 ? 'step-1' : 'step-2';
 
       if (isKilling(state.player, newPos)) {
-        return new Monster(this.pos, DEAD_SPEED, {
+        return new Monster(this.pos, DEAD_SPEED, 'dying', {
           deadAt: Date.now(),
           disposed: false,
-          costume: 'dying',
           opacity: 1
         });
       }
 
       if (!state.level.touches(newPos, this.size, 'wall')) {
-        return new Monster(newPos, this.speed, {
-          costume: costume
-        });
-      } else if (this.reset) {
-        return new Monster(this.reset, this.speed, {
-          costume: costume
-        });
+        return new Monster(newPos, this.speed, costume, this.attrs);
       } else {
-        return new Monster(this.pos, this.speed.times(-1), {
-          costume: costume
-        });
+        return new Monster(this.pos, this.speed.times(-1), costume, this.attrs);
       }
     }
   }, {
@@ -2311,8 +2301,12 @@ function () {
     value: function collide(state) {
       var _this = this;
 
-      if (this.deadAt) {
-        if (this.disposed) {
+      var _this$attrs = this.attrs,
+          deadAt = _this$attrs.deadAt,
+          disposed = _this$attrs.disposed;
+
+      if (deadAt) {
+        if (disposed) {
           return new _State__WEBPACK_IMPORTED_MODULE_3__["default"](state.level, state.actors.filter(function (ac) {
             return ac !== _this;
           }), state.status);

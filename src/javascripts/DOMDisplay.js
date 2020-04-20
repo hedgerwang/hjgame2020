@@ -43,9 +43,12 @@ function drawActors(actors) {
       const py = `${actor.pos.y * scale}px`;
       rect.style.left = px;
       rect.style.top = py;
-      rect.setAttribute('data-direction', actor.direction || '');
+
+      const direction = actor.attrs ? actor.attrs.direction : null;
+      rect.setAttribute('data-direction', direction || '');
       rect.setAttribute('data-costume', actor.costume || '');
-      const {opacity} = actor;
+
+      const opacity = actor.attrs ? actor.attrs.opacity : null;
       if (typeof opacity === 'number') {
         rect.style.opacity = opacity;
       }
