@@ -18,7 +18,7 @@ function isKilling(player, monsterPos) {
 export default class Monster {
   deadAt = null;
   disposed = null;
-  action = null;
+  costume = null;
   opacity = 1;
   constructor(pos, speed, reset, attrs) {
     this.pos = pos;
@@ -28,6 +28,9 @@ export default class Monster {
     this.type = 'monster';
     if (attrs) {
       Object.assign(this, attrs);
+    }
+    if (reset) {
+      debugger;
     }
   }
 
@@ -46,14 +49,14 @@ export default class Monster {
         return new Monster(DEAD_POS, DEAD_SPEED, null, {
           deadAt: this.deadAt,
           disposed: true,
-          action: 'dying',
+          costume: 'dying',
           opacity: 0,
         });
       } else {
         return new Monster(this.pos, DEAD_SPEED, null, {
           deadAt: this.deadAt,
           disposed: false,
-          action: 'dying',
+          costume: 'dying',
           opacity: 1 - duration / 1000,
         });
       }
@@ -62,22 +65,22 @@ export default class Monster {
     let newPos = this.pos.plus(this.speed.times(time));
 
     const dx = (newPos.x | 0) % 2;
-    const action = dx < 1 ? 'step-1' : 'step-2';
+    const costume = dx < 1 ? 'step-1' : 'step-2';
 
     if (isKilling(state.player, newPos)) {
       return new Monster(this.pos, DEAD_SPEED, null, {
         deadAt: Date.now(),
         disposed: false,
-        action: 'dying',
+        costume: 'dying',
         opacity: 1,
       });
     }
     if (!state.level.touches(newPos, this.size, 'wall')) {
-      return new Monster(newPos, this.speed, this.reset, {action});
+      return new Monster(newPos, this.speed, this.reset, {costume});
     } else if (this.reset) {
-      return new Monster(this.reset, this.speed, this.reset, {action});
+      return new Monster(this.reset, this.speed, this.reset, {costume});
     } else {
-      return new Monster(this.pos, this.speed.times(-1), null, {action});
+      return new Monster(this.pos, this.speed.times(-1), null, {costume});
     }
   }
 
@@ -86,7 +89,7 @@ export default class Monster {
       if (this.disposed) {
         return new State(
           state.level,
-          state.actors.filter(ac => ac !== this),
+          state.actors.filter((ac) => ac !== this),
           state.status
         );
       } else {

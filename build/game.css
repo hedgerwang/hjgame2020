@@ -203,9 +203,9 @@ body {
   border-top-left-radius: 3px;
 }
 
-.game .lava[data-action='movex'],
-.game .lava[data-action='movey'],
-.game .lava[data-action='drop'] {
+.game .lava[data-costume='movex'],
+.game .lava[data-costume='movey'],
+.game .lava[data-costume='drop'] {
   border-radius: 50%;
   border: solid 1px red;
 }
@@ -246,15 +246,15 @@ body {
   transform: scaleX(1);
 }
 
-.game .player[data-action='jump'] {
+.game .player[data-costume='jump'] {
   background-image: url('player_jump.png');
 }
 
-.game .player[data-action='step-1'] {
+.game .player[data-costume='step-1'] {
   background-image: url('player_step1.png');
 }
 
-.game .player[data-action='step-2'] {
+.game .player[data-costume='step-2'] {
   background-image: url('player_step2.png');
 }
 
@@ -264,7 +264,7 @@ body {
   background-image: url('player_dead.png');
 }
 
-.game .player[data-action='jump']::after,
+.game .player[data-costume='jump']::after,
 .game.lost .player::after {
   content: '';
   position: absolute;
@@ -281,7 +281,7 @@ body {
   font-family: 'Comic Sans', 'Courier New', Courier, monospace;
 }
 
-.game .player[data-action='jump']::after {
+.game .player[data-costume='jump']::after {
   background: rgb(29, 50, 206);
   content: 'hexagon!';
 }
@@ -291,11 +291,11 @@ body {
   content: 'OH NO!';
 }
 
-.game .player[data-direction='right'][data-action='jump']::after {
+.game .player[data-direction='right'][data-costume='jump']::after {
   transform: scaleX(-1);
 }
 
-.game.lost .player[data-direction='right'][data-action='jump']::after {
+.game.lost .player[data-direction='right'][data-costume='jump']::after {
   transform: scaleX(1);
 }
 
@@ -312,15 +312,15 @@ body {
   background-position: center;
 }
 
-.game .monster[data-action='step-1'] {
+.game .monster[data-costume='step-1'] {
   background-image: url('monster_step_1.png');
 }
 
-.game .monster[data-action='step-2'] {
+.game .monster[data-costume='step-2'] {
   background-image: url('monster_step_2.png');
 }
 
-.game .monster[data-action='dying'] {
+.game .monster[data-costume='dying'] {
   background-image: url('monster_dead.png');
 }
 
@@ -331,11 +331,11 @@ body {
   xbackground-color: rgba(255, 0, 0, 0.4);
 }
 
-.game .fly-guardian[data-action='frame-1'] {
+.game .fly-guardian[data-costume='frame-1'] {
   background-image: url('boss_a_1.png');
 }
 
-.game .fly-guardian[data-action='frame-2'] {
+.game .fly-guardian[data-costume='frame-2'] {
   background-image: url('boss_a_2.png');
 }
 

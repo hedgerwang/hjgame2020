@@ -7,21 +7,21 @@ const gravity = 30;
 const jumpSpeed = 17;
 
 export default class Player {
-  constructor(pos, speed, direction, action) {
+  constructor(pos, speed, costume, direction) {
     this.pos = pos;
     this.speed = speed;
     this.size = SIZE;
     this.type = 'player';
-    this.action = action;
+    this.costume = costume;
     this.direction = direction;
   }
 
   static create(initialPos) {
     const speed = new Vec(0, 0);
     const direction = 'right';
-    const action = 'stand';
+    const costume = 'stand';
     const pos = initialPos.plus(new Vec(0, -0.5));
-    return new Player(pos, speed, direction, action);
+    return new Player(pos, speed, costume, direction);
   }
 
   update = (time, state, keys) => {
@@ -48,25 +48,25 @@ export default class Player {
       ySpeed = 0;
     }
 
-    let action = this.action;
+    let costume = this.costume;
     let direction = this.direction;
 
     if (xSpeed === 0) {
-      action = 'stand';
+      costume = 'stand';
     } else {
       const dx = (pos.x | 0) % 2;
-      action = dx < 1 ? 'step-1' : 'step-2';
+      costume = dx < 1 ? 'step-1' : 'step-2';
       direction = xSpeed > 0 ? 'right' : 'left';
     }
 
     if (ySpeed !== 0) {
-      action = 'jump';
+      costume = 'jump';
     }
 
     const speed = new Vec(xSpeed, ySpeed);
     let sound;
 
-    const player = new Player(pos, speed, direction, action);
-    return new Player(pos, speed, direction, action);
+    const player = new Player(pos, speed, costume, direction);
+    return new Player(pos, speed, costume, direction);
   };
 }

@@ -7,13 +7,13 @@ const SIZE = new Vec(4, 2);
 let dir = 0;
 
 export default class FlyGuardian {
-  constructor(pos, speed, reset, action) {
+  constructor(pos, speed, reset, costume) {
     this.pos = pos;
     this.speed = speed;
     this.reset = reset;
     this.size = SIZE;
     this.type = 'fly-guardian';
-    this.action = action || 'frame-1';
+    this.costume = costume || 'frame-1';
     this.boundingBox = new BoundingBox(pos, SIZE);
   }
 
@@ -31,10 +31,10 @@ export default class FlyGuardian {
   update = (time, state) => {
     let newPos = this.pos.plus(this.speed.times(time));
     const frame = (Math.round(this.pos.x) % 2) + 1;
-    const action = `frame-${frame}`;
+    const costume = `frame-${frame}`;
 
     if (state.level.touches(newPos, this.size, 'wall')) {
-      return new FlyGuardian(this.pos, this.speed.times(-1), null, action);
+      return new FlyGuardian(this.pos, this.speed.times(-1), null, costume);
     }
 
     const anotherGuardian = state.actors.find(
@@ -52,13 +52,13 @@ export default class FlyGuardian {
         speed = speed.times(-1);
         pos = pos.plus(speed.times(0.1));
       }
-      return new FlyGuardian(pos, speed, this.reset, action);
+      return new FlyGuardian(pos, speed, this.reset, costume);
     }
 
     if (this.reset) {
-      return new FlyGuardian(this.reset, this.speed, this.reset, action);
+      return new FlyGuardian(this.reset, this.speed, this.reset, costume);
     }
-    return new FlyGuardian(newPos, this.speed, this.reset, action);
+    return new FlyGuardian(newPos, this.speed, this.reset, costume);
   };
 
   _isTouchingAnotherFlyGuardian = (actor) => {

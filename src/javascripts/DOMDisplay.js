@@ -21,11 +21,11 @@ function drawGrid(level) {
       class: 'grid',
       style: `width: ${level.width * scale}px`,
     },
-    ...level.rows.map(row =>
+    ...level.rows.map((row) =>
       elt(
         'tr',
         {style: `height: ${scale}px`},
-        ...row.map(type => elt('td', {class: type}))
+        ...row.map((type) => elt('td', {class: type}))
       )
     )
   );
@@ -35,7 +35,7 @@ function drawActors(actors) {
   return elt(
     'div',
     {class: 'actors'},
-    ...actors.map(actor => {
+    ...actors.map((actor) => {
       let rect = elt('div', {class: `actor ${actor.type}`});
       rect.style.width = `${actor.size.x * scale}px`;
       rect.style.height = `${actor.size.y * scale}px`;
@@ -44,7 +44,7 @@ function drawActors(actors) {
       rect.style.left = px;
       rect.style.top = py;
       rect.setAttribute('data-direction', actor.direction || '');
-      rect.setAttribute('data-action', actor.action || '');
+      rect.setAttribute('data-costume', actor.costume || '');
       const {opacity} = actor;
       if (typeof opacity === 'number') {
         rect.style.opacity = opacity;
@@ -106,7 +106,7 @@ export default class DOMDisplay {
     window.removeEventListener('resize', this._autoScale, true);
   }
 
-  syncState = state => {
+  syncState = (state) => {
     if (this.actorLayer) {
       this.actorLayer.remove();
     }
@@ -118,7 +118,7 @@ export default class DOMDisplay {
     this._autoScale();
   };
 
-  scrollPlayerIntoView = state => {
+  scrollPlayerIntoView = (state) => {
     let width = this.foreground.clientWidth;
     let height = this.foreground.clientHeight;
     let margin = width / 3;
@@ -146,7 +146,7 @@ export default class DOMDisplay {
 
     this.coinsScored.textContent =
       this.level.coinsCount -
-      state.actors.filter(ac => ac.type === 'coin').length;
+      state.actors.filter((ac) => ac.type === 'coin').length;
 
     const bx1 = -scrollLeft * 0.2;
     const bx2 = -scrollLeft * 0.4;
@@ -156,7 +156,7 @@ export default class DOMDisplay {
 
   _currentGame = NaN;
 
-  _autoScale = event => {
+  _autoScale = (event) => {
     const game = this.dom;
     if (!game) {
       this._currentScale = NaN;

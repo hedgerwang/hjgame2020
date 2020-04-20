@@ -53,15 +53,15 @@ async function runGame(viewport, plans, Display, inputKeys) {
   alert("You've won!");
 }
 
-const initialInteractionEvents = ['touchend', 'mouseup', 'keyup'];
+const initialIntercostumeEvents = ['touchend', 'mouseup', 'keyup'];
 
-// Long sound must be trigged by user's interaction.
+// Long sound must be trigged by user's intercostume.
 function playGameSound(event) {
   if (event.type === 'keyup' && !/Arrow/.test(event.key)) {
     return;
   }
   if (Sound.get('playing_1.mp3').play(true)) {
-    initialInteractionEvents.forEach((type) =>
+    initialIntercostumeEvents.forEach((type) =>
       window.removeEventListener(type, playGameSound, true)
     );
   }
@@ -73,8 +73,8 @@ export default class Game {
     viewport.className = 'viewport';
     document.body.appendChild(viewport);
 
-    // Long sound must be trigged by user's interaction first.
-    initialInteractionEvents.forEach((type) =>
+    // Long sound must be trigged by user's intercostume first.
+    initialIntercostumeEvents.forEach((type) =>
       window.addEventListener(type, playGameSound, true)
     );
 
