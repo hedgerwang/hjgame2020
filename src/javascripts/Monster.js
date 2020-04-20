@@ -20,17 +20,13 @@ export default class Monster {
   disposed = null;
   costume = null;
   opacity = 1;
-  constructor(pos, speed, reset, attrs) {
+  constructor(pos, speed, attrs) {
     this.pos = pos;
     this.speed = speed;
-    this.reset = reset;
     this.size = SIZE;
     this.type = 'monster';
     if (attrs) {
       Object.assign(this, attrs);
-    }
-    if (reset) {
-      debugger;
     }
   }
 
@@ -46,14 +42,14 @@ export default class Monster {
     if (this.deadAt) {
       const duration = Date.now() - this.deadAt;
       if (duration > 1000) {
-        return new Monster(DEAD_POS, DEAD_SPEED, null, {
+        return new Monster(DEAD_POS, DEAD_SPEED, {
           deadAt: this.deadAt,
           disposed: true,
           costume: 'dying',
           opacity: 0,
         });
       } else {
-        return new Monster(this.pos, DEAD_SPEED, null, {
+        return new Monster(this.pos, DEAD_SPEED, {
           deadAt: this.deadAt,
           disposed: false,
           costume: 'dying',
@@ -68,7 +64,7 @@ export default class Monster {
     const costume = dx < 1 ? 'step-1' : 'step-2';
 
     if (isKilling(state.player, newPos)) {
-      return new Monster(this.pos, DEAD_SPEED, null, {
+      return new Monster(this.pos, DEAD_SPEED, {
         deadAt: Date.now(),
         disposed: false,
         costume: 'dying',
@@ -76,11 +72,11 @@ export default class Monster {
       });
     }
     if (!state.level.touches(newPos, this.size, 'wall')) {
-      return new Monster(newPos, this.speed, this.reset, {costume});
+      return new Monster(newPos, this.speed, {costume});
     } else if (this.reset) {
-      return new Monster(this.reset, this.speed, this.reset, {costume});
+      return new Monster(this.reset, this.speed, {costume});
     } else {
-      return new Monster(this.pos, this.speed.times(-1), null, {costume});
+      return new Monster(this.pos, this.speed.times(-1), {costume});
     }
   }
 

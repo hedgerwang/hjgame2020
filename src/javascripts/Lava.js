@@ -4,22 +4,22 @@ import Vec from './Vec';
 const SIZE = new Vec(1, 1);
 
 export default class Lava {
-  constructor(pos, speed, reset, costume) {
-    this.pos = pos;
-    this.speed = speed;
-    this.reset = reset;
-    this.size = SIZE;
-    this.type = 'lava';
+  constructor(pos, speed, costume, attrs) {
+    this.attrs = attrs || {};
     this.costume = costume;
+    this.pos = pos;
+    this.size = SIZE;
+    this.speed = speed;
+    this.type = 'lava';
   }
 
   static create(pos, ch) {
     if (ch == '=') {
-      return new Lava(pos, new Vec(2, 0), null, 'movex');
+      return new Lava(pos, new Vec(2, 0), 'movex');
     } else if (ch == '|') {
-      return new Lava(pos, new Vec(0, 2), null, 'movey');
+      return new Lava(pos, new Vec(0, 2), 'movey');
     } else if (ch == 'v') {
-      return new Lava(pos, new Vec(0, 3), pos, 'drop');
+      return new Lava(pos, new Vec(0, 3), 'drop', {reset: pos});
     }
   }
 
@@ -30,11 +30,11 @@ export default class Lava {
   update = (time, state) => {
     let newPos = this.pos.plus(this.speed.times(time));
     if (!state.level.touches(newPos, this.size, 'wall')) {
-      return new Lava(newPos, this.speed, this.reset, this.costume);
-    } else if (this.reset) {
-      return new Lava(this.reset, this.speed, this.reset, this.costume);
+      return new Lava(newPos, this.speed, this.costume, this.attrs);
+    } else if (this.attrs.reset) {
+      return new Lava(this.attrs.reset, this.speed, this.costume, this.attrs);
     } else {
-      return new Lava(this.pos, this.speed.times(-1), null, this.costume);
+      return new Lava(this.pos, this.speed.times(-1), this.costume);
     }
   };
 }
