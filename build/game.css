@@ -310,6 +310,7 @@ body {
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
+  opacity: var(--opacity, 1);
 }
 
 .game .monster[data-costume='step-1'] {
@@ -328,11 +329,24 @@ body {
   background-size: 100% 180%;
   background-repeat: no-repeat;
   background-position: center top;
-  background-color: rgba(255, 0, 0, 0.4);
+  background-color: rgba(155, 0, 0, 0);
 }
 
-.game .fly-guardian[data-direction='right'] {
-  transform: rotateY(180deg);
+.game .fly-guardian::after {
+  background-color: rgba(155, 0, 0, 0);
+  background-image: url('boss_ray_1.png');
+  background-position: center top;
+  background-size: 100% 100%;
+  content: '';
+  display: block;
+  height: 60px;
+  left: 10%;
+  opacity: var(--opacity);
+  position: absolute;
+  top: 98%;
+  transform-origin: 50% 0;
+  transform: rotateY(var(--rotate)) skew(var(--skew));
+  width: 80%;
 }
 
 .game .fly-guardian[data-costume='frame-1'] {

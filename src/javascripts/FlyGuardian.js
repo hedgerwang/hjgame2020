@@ -25,14 +25,19 @@ export default class FlyGuardian {
   }
 
   collide = (state) => {
-    return new State(state.level, state.actors, 'lost');
+    return state;
+    // return new State(state.level, state.actors, 'lost');
   };
 
   update = (time, state) => {
     const now = Date.now();
     const frame = now % 8 <= 4 ? 1 : 2;
+    // deg => 1 ~ -1.
+    const deg = Math.cos(((now % 3600) / 3600) * Math.PI * 2);
+    const rotate = `${deg * 45}deg`;
+    const opacity = Math.abs(deg) + 0.2;
     const costume = `frame-${frame}`;
-
+    const skew = `${deg / 20}turn`;
     let speed = this.speed;
     let pos = this.pos.plus(speed.times(time));
     let attrs = this.attrs;
@@ -63,10 +68,7 @@ export default class FlyGuardian {
     }
 
     const direction = speed.x < 0 ? 'left' : 'right';
-    if (attrs.direction !== direction) {
-      attrs = {...attrs, direction};
-    }
-
+    attrs = {...attrs, direction, rotate, opacity, skew};
     return new FlyGuardian(pos, speed, costume, attrs);
   };
 }

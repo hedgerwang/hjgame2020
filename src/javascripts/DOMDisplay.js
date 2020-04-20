@@ -44,14 +44,25 @@ function drawActors(actors) {
       rect.style.left = px;
       rect.style.top = py;
 
-      const direction = actor.attrs ? actor.attrs.direction : null;
-      rect.setAttribute('data-direction', direction || '');
-      rect.setAttribute('data-costume', actor.costume || '');
-
-      const opacity = actor.attrs ? actor.attrs.opacity : null;
-      if (typeof opacity === 'number') {
-        rect.style.opacity = opacity;
+      const {attrs} = actor;
+      if (attrs) {
+        Object.keys(attrs).forEach((key) => {
+          const val = attrs[key];
+          if (typeof val === 'string' || typeof val === 'number') {
+            if (
+              key === 'rotate' ||
+              key === 'opacity' ||
+              key === 'perspective' ||
+              key === 'skew'
+            ) {
+              rect.style.setProperty(`--${key}`, val);
+            } else {
+              rect.setAttribute(`data-${key}`, val);
+            }
+          }
+        });
       }
+      rect.setAttribute('data-costume', actor.costume || '');
       return rect;
     })
   );
