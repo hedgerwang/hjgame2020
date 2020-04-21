@@ -68,7 +68,7 @@ function playGameSound(event) {
 }
 
 export default class Game {
-  constructor() {
+  constructor(levelNumber = 1) {
     const viewport = document.createElement('div');
     viewport.className = 'viewport';
     document.body.appendChild(viewport);
@@ -79,7 +79,12 @@ export default class Game {
     );
 
     const inputManager = new InputManager(viewport);
-    runGame(viewport, GAME_LEVELS, DOMDisplay, inputManager);
+
+    let levels = GAME_LEVELS[levelNumber - 1]
+      ? GAME_LEVELS.slice(levelNumber - 1)
+      : GAME_LEVELS;
+
+    runGame(viewport, levels, DOMDisplay, inputManager);
 
     window.onerror = function (msg, url, line) {
       // alert(msg);
