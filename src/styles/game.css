@@ -357,6 +357,13 @@ body {
   background-image: url('boss_a_2.png');
 }
 
+.game .fly-guardian[data-attacking='true'] {
+  filter: saturate(250%);
+}
+.game .fly-guardian[data-attacking='true']::after {
+  filter: invert();
+}
+
 .input-manager-panel {
   position: absolute;
   left: 10px;

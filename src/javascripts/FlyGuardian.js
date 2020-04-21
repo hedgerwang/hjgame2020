@@ -82,8 +82,9 @@ export default class FlyGuardian {
       }
     }
 
+    const attacking = isAttacking(state.player, this);
     const direction = speed.x < 0 ? 'left' : 'right';
-    attrs = {...attrs, direction, rotate, opacity, skew};
+    attrs = {...attrs, direction, rotate, opacity, skew, attacking};
     return new FlyGuardian(pos, speed, costume, attrs);
   };
 }

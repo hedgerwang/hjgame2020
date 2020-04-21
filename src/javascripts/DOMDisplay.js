@@ -48,7 +48,8 @@ function drawActors(actors) {
       if (attrs) {
         Object.keys(attrs).forEach((key) => {
           const val = attrs[key];
-          if (typeof val === 'string' || typeof val === 'number') {
+          const vt = typeof val;
+          if (vt === 'string' || vt === 'number' || vt === 'boolean') {
             if (
               key === 'rotate' ||
               key === 'opacity' ||
