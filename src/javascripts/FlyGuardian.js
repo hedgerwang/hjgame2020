@@ -4,16 +4,16 @@ import Vec from './Vec';
 import clamp from './clamp';
 
 const SIZE = new Vec(4, 4);
-const ATTACK_POS_OFFSET = new Vec(1, 1);
+const ATTACK_POS_OFFSET = new Vec(1.5, 1.5);
 const ATTACK_SIZE_OFFSET = new Vec(-1, -1);
 
 function isAttacking(player, guardian) {
   const playerBox = new BoundingBox(player.pos, player.size);
-  const guardianBox = new BoundingBox(
+  const attachBox = new BoundingBox(
     guardian.pos.plus(ATTACK_POS_OFFSET),
     guardian.size.plus(ATTACK_SIZE_OFFSET)
   );
-  return guardianBox.isOverlapping(playerBox);
+  return attachBox.isOverlapping(playerBox);
 }
 
 let dir = 0;
@@ -40,7 +40,6 @@ export default class FlyGuardian {
     let {status, player, actors, level} = state;
     if (isAttacking(player, this)) {
       status = 'lost';
-      debugger;
     }
     return new State(level, actors, status);
   };

@@ -111,7 +111,6 @@ export default class DOMDisplay {
 
     window.addEventListener('resize', this._autoScale, true);
     document.addEventListener('scroll', this._autoScale, true);
-    console.log('DOMDisplay', Date.now());
   }
 
   clear() {

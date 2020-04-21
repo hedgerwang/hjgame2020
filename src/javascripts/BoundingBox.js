@@ -32,6 +32,10 @@ export default class BoundingBox {
   }
 
   isOverlapping(box) {
-    return isOverlapping(box, this); // || isOverlapping(this, box);
+    return isOverlapping(box, this) || isOverlapping(this, box);
+  }
+
+  toString() {
+    return `(${this.pos} - ${this.size})`;
   }
 }

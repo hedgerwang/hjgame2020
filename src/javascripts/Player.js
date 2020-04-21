@@ -1,3 +1,4 @@
+import BoundingBox from './BoundingBox';
 import Vec from './Vec';
 import Sound from './Sound';
 
@@ -5,6 +6,19 @@ const SIZE = new Vec(0.8, 1.5);
 const playerXSpeed = 7;
 const gravity = 30;
 const jumpSpeed = 17;
+
+function findFloorActor(player, actor) {
+  if (actor.type !== 'fly-guardian') {
+    return false;
+  }
+  const feetBox = new BoundingBox(
+    new Vec(player.pos.x, player.pos.y + player.size.y - 0.5),
+    new Vec(player.size.x, 0.5)
+  );
+  const floorBox = new BoundingBox(actor.pos, new Vec(actor.size.x, 0.5));
+  const rr = feetBox.isOverlapping(floorBox);
+  return feetBox.isOverlapping(floorBox);
+}
 
 export default class Player {
   constructor(pos, speed, costume, attrs) {
@@ -40,7 +54,20 @@ export default class Player {
 
     let ySpeed = this.speed.y + time * gravity;
     let movedY = pos.plus(new Vec(0, ySpeed * time));
-    if (!state.level.touches(movedY, this.size, 'wall')) {
+    let floorActor;
+
+    if (ySpeed > 0) {
+      // falling down
+      const player = {pos, size: this.size};
+      floorActor = state.actors.find((aa) => findFloorActor(player, aa));
+      if (floorActor) {
+        // Player is standing on the floor actor.
+        pos = pos.plus(new Vec(floorActor.speed.x * time, 0));
+        pos.y = floorActor.pos.y - this.size.y;
+      }
+    }
+
+    if (!floorActor && !state.level.touches(movedY, this.size, 'wall')) {
       pos = movedY;
     } else if (keys.ArrowUp && ySpeed > 0) {
       ySpeed = -jumpSpeed;
@@ -63,9 +90,7 @@ export default class Player {
       costume = 'jump';
     }
 
-    const speed = new Vec(xSpeed, ySpeed);
-    let sound;
-
+    let speed = new Vec(xSpeed, ySpeed);
     return new Player(pos, speed, costume, {direction});
   };
 }

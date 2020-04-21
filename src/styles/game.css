@@ -329,11 +329,11 @@ body {
   background-size: 100% 50%;
   background-repeat: no-repeat;
   background-position: center top;
-  background-color: rgba(155, 0, 0, 0.2);
+  /* background-color: rgba(155, 0, 0, 0.2); */
 }
 
 .game .fly-guardian::after {
-  background-color: rgba(155, 0, 0, 0.3);
+  /* background-color: rgba(155, 0, 0, 0.3); */
   background-image: url('boss_ray_1.png');
   background-position: center top;
   background-size: 100% 100%;

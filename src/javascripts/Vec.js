@@ -5,6 +5,13 @@ export default class Vec {
     this._length = null;
     this.x = x;
     this.y = y;
+    if (isNaN(x) || isNaN(y)) {
+      throw new Error(`Invalid value ${this.toString()}`);
+    }
+  }
+
+  toString() {
+    return `[${this._x}, ${this._y}]`;
   }
 
   plus(vector) {
